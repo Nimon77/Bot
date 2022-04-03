@@ -122,10 +122,12 @@ async function attemptPlace() {
     // Only updates token if needed
     await updateToken()
 
-    let map0, map1;
+    let map0, map1, map2, map3;
     try {
         map0 = await getMapFromUrl(await getCurrentImageUrl('0'));
         map1 = await getMapFromUrl(await getCurrentImageUrl('1'));
+        map2 = await getMapFromUrl(await getCurrentImageUrl('2'))
+        map3 = await getMapFromUrl(await getCurrentImageUrl('3'))
     } catch (e) {
         console.warn('Error retrieving map: ', e);
         setTimeout(attemptPlace, 15000); // Try again in 15s
@@ -133,20 +135,21 @@ async function attemptPlace() {
     }
 
     const rgbaOrder = currentOrders.data;
-    const rgbaCanvas = [].concat(map0.data, map1.data);
+    const rgbaCanvas = [[].concat(map0.data, map1.data), [].concat(map2.data, map3.data)];
 
     for (const i of order) {
         const x = i % 2000;
         const y = Math.floor(i / 2000);
 
         let canvasIndex = Math.floor(x / 1000)
-        let ci = x - (1000 * canvasIndex) + (y * 1000)
+        let canvasYndex = Math.floor(y / 1000)
+        let ci = x - (1000 * canvasIndex) + ((y - 1000 * canvasYndex) * 1000)
 
         // Ignore empty pixels...
         if (rgbaOrder[(i * 4) + 3] === 0) continue;
 
         const hex = getPixelHex(rgbaOrder, i);
-        const canvasHex = getPixelHex(rgbaCanvas[canvasIndex], ci)
+        const canvasHex = getPixelHex(rgbaCanvas[canvasYndex][canvasIndex], ci)
 
         // Correct pixel
         if (hex === canvasHex) continue;
