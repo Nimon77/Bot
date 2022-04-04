@@ -14,8 +14,8 @@
 // @grant        GM_getResourceText
 // @grant        GM_addStyle
 // @grant        GM.xmlHttpRequest
+// @connect      reddit.com
 // @connect      place.bilaboz.me
-// @connect      hot-potato.reddit.com
 // ==/UserScript==
 
 // Sorry voor de rommelige code, haast en clean gaatn iet altijd samen ;)
